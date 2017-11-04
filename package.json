@@ -1,0 +1,23 @@
+{
+  "name": "Constructor-Hangman",
+  "version": "1.0.0",
+  "description": "Week 11 Homework - Advanced JavaScript Assignment: Constructor Hangman",
+  "main": "hangman.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrapala/constructor-hangman.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jrapala/constructor-hangman/issues"
+  },
+  "homepage": "https://github.com/jrapala/constructor-hangman#readme",
+  "dependencies": {
+    "inquirer": "^3.3.0"
+  }
+}
