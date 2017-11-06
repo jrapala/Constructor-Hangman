@@ -4,10 +4,19 @@
 
 // Steps:
 //
-// 1. Console.log a displayed word
-// 2. Console.log a word populated by blanks
 // 
 //
+// 
+//
+// Every guess = decrease by 1
+// Check if letter was already guessed
+// If out of guesses, you lose! 
+//
+  				// if (letterFound) {
+  				// 	console.log("\nCORRECT!!!");
+  				// } else {
+  				// 	console.log("\nINCORRECT!!!");
+  				// }
 
 	// Setup Variables 
 	// =====================================================================================
@@ -21,13 +30,12 @@
 	// Functions
 	// =====================================================================================
 
-		// Game Play
+		// Game Play Function
 		var gamePlay = {
 			currentWord : null,
 			guessesRemaining : 0,
 			guessedLetters : [],
 			startGame : function() {
-				var self = this;
 				console.log("\n\n\n\n\n\n\n\nWelcome to Hangman!\n");
 				// Choose random word
 				wordChooser.chooseRandomWord();
@@ -42,6 +50,11 @@
 				console.log(`You have guesses ${this.guessesRemaining} remaining.\n`);
 				// Create gameboard
 				this.currentWord.createGameboard();
+				this.promptUser();
+			},
+			promptUser : function() {
+				var self = this;
+				// Ask user for a letter
 				inquirer.prompt([{
 					name: "userLetter",
       				type: "input",
@@ -50,17 +63,37 @@
 					// Take letter passed in by user
 					var guessedLetter = response.userLetter;
 					// Add letter to list of guessed letters
-					self.guessedLetters.push(guessedLetter);	
-					self.currentWord.createGameboard();			
+					self.guessedLetters.push(guessedLetter);
+					// Check if letter is in word
+					var letterFound = self.currentWord.checkLetter(guessedLetter);
+					// Refresh gameboard	
+					self.currentWord.createGameboard();
+					// Check if a letter was guessed correctly	
+					if (letterFound) {
+						console.log("\nCORRECT!!!\n");
+					} else {
+						console.log("\nINCORRECT!!!\n");
+						self.guessesRemaining--;
+						// Display remaining guesses if there are more than 0
+						if (self.guessesRemaining > 0) {
+							console.log(`${self.guessesRemaining} guesses remaining!!!\n`);
+						};
+					}
+					// If the user has guesses remaining, prompt for another guess
+					if (self.guessesRemaining > 0) {
+						self.promptUser();
+					// If the user has run out of guesses, end game and display word.
+					} else if (self.guessesRemaining === 0) {
+						console.log(`Sorry, you lose! The word was "${self.currentWord.word}"\n`);
+					}
 
 				});
-
 
 				// console.log(this.currentWord.letters);
 			}
 		};
 
-		// Word Chooser 
+		// Word Chooser Function
 		var wordChooser = {
 			// Word list
 			wordsList : ['banana', 'apple', 'orange', 'peach'],
@@ -78,7 +111,6 @@
 
 		// Word Constructor Function
 		var WordConstructor = function(word) {
-			var self = this;
 			this.word = word;
 			this.letters = [];
 			this.wordGuessed = false;
@@ -86,36 +118,44 @@
 				console.log(`The word is ${this.word}\n`);
 			};
 			this.createLetterObjects = function() {
-				for (var i = 0; i < self.word.length; i++) {
-      				var newLetter = new LetterConstructor(self.word[i]);
+				for (var i = 0; i < this.word.length; i++) {
+      				var newLetter = new LetterConstructor(this.word[i]);
       				this.letters.push(newLetter);
     			}
   			};
   			this.createGameboard = function() {
     			var gameboard = '';
-    			for (var i = 0; i < self.letters.length; i++) {
-    				var currentLetter = self.letters[i].letterVisibility();
+    			for (var i = 0; i < this.letters.length; i++) {
+    				var currentLetter = this.letters[i].letterVisibility();
     				gameboard += currentLetter;
-
-    			// self.letters.forEach(function(letter){
-      	// 			var currentLetter = letter.letterVisibility();
-      	// 			gameboard += currentLetter;
     			};
-
-    			console.log(gameboard + "\n");
+    			// Display gameboard
+    			console.log("\n" + gameboard + "\n");
   			};
-
+  			this.checkLetter = function(userLetter) {
+  				var letterFound = false;
+  				for (var i = 0; i < this.letters.length; i++) {
+  					if (this.letters[i].letter === userLetter) {
+  						this.letters[i].showLetter = true;
+  						letterFound = true;
+  					};
+  				};
+  				if (letterFound) {
+  					return true;
+  				} else {
+  					return false;
+  				}
+  			};
 			// Word: Used to create an object representing the current word the user is attempting to guess. 
 			// This should contain word specific logic and data.
 		};		
 
 		// Letter Constructor Function
 		var LetterConstructor = function(letter) {
-			var self = this;
 			this.letter = letter;
 			this.showLetter = false;
 			this.displayLetter = function() {
-				console.log(self.letter);
+				console.log(this.letter);
 			};
 			this.letterVisibility = function() {
 				if (this.letter === ' ') { 
