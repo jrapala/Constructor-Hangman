@@ -24,14 +24,39 @@
 		// Game Play
 		var gamePlay = {
 			currentWord : null,
+			guessesRemaining : 0,
+			guessedLetters : [],
 			startGame : function() {
-				console.log("Welcome to Hangman!");
+				var self = this;
+				console.log("\n\n\n\n\n\n\n\nWelcome to Hangman!\n");
 				// Choose random word
 				wordChooser.chooseRandomWord();
 				// Create word object
 				this.currentWord = new WordConstructor(wordChooser.randomWord);
+				// Create letter objects
+				this.currentWord.createLetterObjects();
 				// Debug display
 				this.currentWord.display();
+				// Remaining guesses
+				this.guessesRemaining = this.currentWord.word.length;
+				console.log(`You have guesses ${this.guessesRemaining} remaining.\n`);
+				// Create gameboard
+				this.currentWord.createGameboard();
+				inquirer.prompt([{
+					name: "userLetter",
+      				type: "input",
+      				message: "Guess a letter!"
+				}]).then(function(response) {
+					// Take letter passed in by user
+					var guessedLetter = response.userLetter;
+					// Add letter to list of guessed letters
+					self.guessedLetters.push(guessedLetter);	
+					self.currentWord.createGameboard();			
+
+				});
+
+
+				// console.log(this.currentWord.letters);
 			}
 		};
 
@@ -53,27 +78,54 @@
 
 		// Word Constructor Function
 		var WordConstructor = function(word) {
+			var self = this;
 			this.word = word;
+			this.letters = [];
+			this.wordGuessed = false;
 			this.display = function() {
-				console.log(`The word is ${this.word}`);
-			}
+				console.log(`The word is ${this.word}\n`);
+			};
+			this.createLetterObjects = function() {
+				for (var i = 0; i < self.word.length; i++) {
+      				var newLetter = new LetterConstructor(self.word[i]);
+      				this.letters.push(newLetter);
+    			}
+  			};
+  			this.createGameboard = function() {
+    			var gameboard = '';
+    			for (var i = 0; i < self.letters.length; i++) {
+    				var currentLetter = self.letters[i].letterVisibility();
+    				gameboard += currentLetter;
+
+    			// self.letters.forEach(function(letter){
+      	// 			var currentLetter = letter.letterVisibility();
+      	// 			gameboard += currentLetter;
+    			};
+
+    			console.log(gameboard + "\n");
+  			};
+
 			// Word: Used to create an object representing the current word the user is attempting to guess. 
 			// This should contain word specific logic and data.
 		};		
 
 		// Letter Constructor Function
 		var LetterConstructor = function(letter) {
+			var self = this;
 			this.letter = letter;
 			this.showLetter = false;
-			showLetterFunction = function() {
+			this.displayLetter = function() {
+				console.log(self.letter);
+			};
+			this.letterVisibility = function() {
 				if (this.letter === ' ') { 
       				this.showLetter = true;
       				return '  ';
     			}
     			if (this.showLetter === false) { 
-    				return ' _ ';
+    				return '_ ';
     			} else {
-    				return this.letter;
+    				return (this.letter + " ");
     			}
   			};
 
@@ -110,7 +162,7 @@
 			// Letter: Used for each letter in the current word. Each letter object should either display an 
 			// underlying character, or a blank placeholder (such as an underscore), depending on whether or not 
 			// the user has guessed the letter. This should contain letter specific logic and data.
-		};
+	
 
 	// Gameplay Functions
 	// =====================================================================================
