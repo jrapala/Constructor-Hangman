@@ -6,26 +6,16 @@
 //
 // 
 //
-// 
-//
-// Every guess = decrease by 1
+// Create seperate files
+// Ask to start new game if win/lose
 // Check if letter was already guessed
-// If out of guesses, you lose! 
-//
-  				// if (letterFound) {
-  				// 	console.log("\nCORRECT!!!");
-  				// } else {
-  				// 	console.log("\nINCORRECT!!!");
-  				// }
+
 
 	// Setup Variables 
 	// =====================================================================================
 
 		// NPM packages
 		var inquirer = require('inquirer');
-
-		var guessed = false;
-		var guessesRemaining;
 
 	// Functions
 	// =====================================================================================
@@ -66,26 +56,32 @@
 					self.guessedLetters.push(guessedLetter);
 					// Check if letter is in word
 					var letterFound = self.currentWord.checkLetter(guessedLetter);
-					// Refresh gameboard	
-					self.currentWord.createGameboard();
-					// Check if a letter was guessed correctly	
-					if (letterFound) {
-						console.log("\nCORRECT!!!\n");
+					// Check if word was found 
+					var wordFound = self.currentWord.checkIfWordFound();
+					if (wordFound) {
+						console.log("You won!");
 					} else {
-						console.log("\nINCORRECT!!!\n");
-						self.guessesRemaining--;
-						// Display remaining guesses if there are more than 0
+						// Refresh gameboard	
+						self.currentWord.createGameboard();
+						// Check if a letter was guessed correctly	
+						if (letterFound) {
+							console.log("\nCORRECT!!!\n");
+						} else {
+							console.log("\nINCORRECT!!!\n");
+							self.guessesRemaining--;
+							// Display remaining guesses if there are more than 0
+							if (self.guessesRemaining > 0) {
+								console.log(`${self.guessesRemaining} guesses remaining!!!\n`);
+							};
+						}
+						// If the user has guesses remaining, prompt for another guess
 						if (self.guessesRemaining > 0) {
-							console.log(`${self.guessesRemaining} guesses remaining!!!\n`);
-						};
-					}
-					// If the user has guesses remaining, prompt for another guess
-					if (self.guessesRemaining > 0) {
-						self.promptUser();
-					// If the user has run out of guesses, end game and display word.
-					} else if (self.guessesRemaining === 0) {
-						console.log(`Sorry, you lose! The word was "${self.currentWord.word}"\n`);
-					}
+							self.promptUser();
+						// If the user has run out of guesses, end game and display word.
+						} else if (self.guessesRemaining === 0) {
+							console.log(`Sorry, you lose! The word was "${self.currentWord.word}"\n`);
+						}
+					};
 
 				});
 
@@ -146,6 +142,14 @@
   					return false;
   				}
   			};
+  			this.checkIfWordFound = function() {
+  				var wordFound = true;
+  				for (var i = 0; i < this.letters.length; i++) {
+  					if (this.letters[i].showLetter === false)
+  						wordFound = false;
+  				};
+  				return wordFound; 
+  			}
 			// Word: Used to create an object representing the current word the user is attempting to guess. 
 			// This should contain word specific logic and data.
 		};		
