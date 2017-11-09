@@ -6,9 +6,9 @@
 //
 // 
 //
-// Prevent uppercase or numbers
-// Ask to start new game if win/lose
 // Check if letter was already guessed
+// Win/Loss counter
+// Get rid of opening message
 // Combine word chooser function
 
 
@@ -29,12 +29,30 @@
 			currentWord : null,
 			guessesRemaining : 0,
 			guessedLetters : [],
+			wordChooser : {
+				// Word list
+				wordsList : ['banana', 'apple', 'orange', 'peach'],
+				// Random Number
+				randomNumber : 0,
+				// Current word to guess 
+				randomWord : null,
+				// Pick mystery word at random
+				chooseRandomWord : function(){
+					// Find random number between 0 and length of word list
+					this.randomNumber = Math.floor(Math.random()* this.wordsList.length);		
+					this.randomWord = this.wordsList[this.randomNumber].toUpperCase();		
+				}
+			},
+			welcome : function(){
+				console.log("\n\n\n\n\nWelcome to Hangman!\n");
+				console.log('\n  _______','\n |/      |','\n |      (_)','\n |      \\|/','\n |       |','\n |      / \\','\n |','\n_|___\n\n\n');
+				this.startGame();
+			},
 			startGame : function() {
-				console.log("\n\n\n\n\n\n\n\nWelcome to Hangman!\n");
 				// Choose random word
-				wordChooser.chooseRandomWord();
+				this.wordChooser.chooseRandomWord();
 				// Create word object
-				this.currentWord = new WordConstructor(wordChooser.randomWord);
+				this.currentWord = new WordConstructor(this.wordChooser.randomWord);
 				// Create letter objects
 				this.currentWord.createLetterObjects();
 				// Debug display
@@ -55,7 +73,7 @@
       				message: "Guess a letter!"
 				}]).then(function(response) {
 					// Take letter passed in by user
-					var guessedLetter = response.userLetter;
+					var guessedLetter = response.userLetter.toUpperCase();
 					// Validate letter
 					if (!isLetter(guessedLetter)) {
 						console.log("\nYou did not choose a letter. Please try again!\n");
@@ -99,8 +117,6 @@
 						};
 					}
 				});
-
-				// console.log(this.currentWord.letters);
 			},
 			playAgain : function() {
 				var self = this;
@@ -118,24 +134,8 @@
 			}
 		};
 
-		// Word Chooser Function
-		var wordChooser = {
-			// Word list
-			wordsList : ['banana', 'apple', 'orange', 'peach'],
-			// Random Number
-			randomNumber : 0,
-			// Current word to guess 
-			randomWord : null,
-			// Pick mystery word at random
-			chooseRandomWord : function(){
-				// Find random number between 0 and length of word list
-				this.randomNumber = Math.floor(Math.random()* this.wordsList.length);		
-				this.randomWord = this.wordsList[this.randomNumber];		
-			}
-		};
-
 
 	// Start up Function
 	// =====================================================================================
 
-		gamePlay.startGame();
+		gamePlay.welcome();
