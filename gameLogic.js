@@ -12,6 +12,7 @@
 		currentWord : null,
 		guessesRemaining : 0,
 		guessedLetters : [],
+		letterAlreadyGuessed : false,
 		wordChooser : {
 			// Word list
 			wordsList : ['banana', 'apple', 'orange', 'peach'],
@@ -38,7 +39,7 @@
 			// Create letter objects
 			this.currentWord.createLetterObjects();
 			// Debug display
-			this.currentWord.display();
+			//this.currentWord.display();
 			// Remaining guesses
 			this.guessesRemaining = this.currentWord.word.length;
 			console.log(`You have guesses ${this.guessesRemaining} remaining.\n`);
@@ -47,18 +48,29 @@
 			this.promptUser();
 		},
 		promptUser : function() {
+			this.letterAlreadyGuessed = false;
 			var self = this;
 			// Ask user for a letter
 			inquirer.prompt([{
 				name: "userLetter",
   				type: "input",
-  				message: "Guess a letter!"
+  				message: "Guess a letter!",
+  				// Validate letter
+  				validate: function(userInput) {
+        			if (isLetter(userInput)) {
+          				return true;
+        			} else {
+        				console.log("\n\nYou did not choose a letter. Please try again!\n");
+          				return false;
+        			}
+      			}
 			}]).then(function(response) {
 				// Take letter passed in by user
 				var guessedLetter = response.userLetter.toUpperCase();
-				// Validate letter
-				if (!isLetter(guessedLetter)) {
-					console.log("\nYou did not choose a letter. Please try again!\n");
+				// Chec if the letter was already guessed
+				self.letterAlreadyGuessed = self.checkIfLetterAlreadyGuessed(guessedLetter);
+				if (self.letterAlreadyGuessed) {
+					console.log("\nYou already guessed that letter! Please try again!\n");
 					self.promptUser();
 				} else {
 					// Add letter to list of guessed letters
@@ -100,7 +112,16 @@
 				}
 			});
 		},
+		checkIfLetterAlreadyGuessed : function(guessedLetter) {
+			for (var i = 0; i<this.guessedLetters.length; i++) {
+				if (guessedLetter === this.guessedLetters[i]) {
+					return true;
+				} 
+			}
+			return false;
+		},
 		playAgain : function() {
+			this.guessedLetters = [];
 			var self = this;
 			inquirer.prompt([{
 				name: "userChoice",
