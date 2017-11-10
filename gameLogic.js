@@ -28,7 +28,7 @@
 			}
 		},
 		welcome : function(){
-			console.log("\n\n\n\n\nWelcome to Hangman!\n");
+			console.log(chalk.bold("\n\n\nW e l c o m e   t o   H a n g m a n !\n"));
 			console.log('\n  _______','\n |/      |','\n |      (_)','\n |      \\|/','\n |       |','\n |      / \\','\n |','\n_|___\n\n\n');
 		},
 		startGame : function() {
@@ -89,9 +89,9 @@
 						self.currentWord.createGameboard();
 						// Check if a letter was guessed correctly	
 						if (letterFound) {
-							console.log("\nCORRECT!!!\n");
+							console.log(chalk.green("\nCORRECT!!!\n"));
 						} else {
-							console.log("\nINCORRECT!!!\n");
+							console.log(chalk.red("\nINCORRECT!!!\n"));
 							self.guessesRemaining--;
 							// Display remaining guesses if there are more than 0
 							if (self.guessesRemaining === 1) {
@@ -105,7 +105,7 @@
 							self.promptUser();
 						// If the user has run out of guesses, end game and display word.
 						} else if (self.guessesRemaining === 0) {
-							console.log(`Sorry, you lose! The word was "${self.currentWord.word}"\n`);
+							console.log(chalk.bold(`Sorry, you lose! The word was "${self.currentWord.word}"\n`));
 							self.playAgain();
 						}
 					};
