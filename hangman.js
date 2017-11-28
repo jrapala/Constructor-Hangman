@@ -23,10 +23,3 @@
 	// =====================================================================================
 
 		hangman();
-
-
-
-// TO DO LIST:
-//
-// Check if letter was already guessed
-// Win/Loss counter

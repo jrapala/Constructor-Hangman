@@ -1,21 +1,23 @@
-	// Setup Variables 
-	// =====================================================================================
+// Setup Variables 
+// =====================================================================================
 
-		// NPM packages & exports
-		var inquirer = require('inquirer');
-		var chalk = require('chalk');
-		var isLetter = require('is-letter');
-		var WordConstructor = require('./wordConstructor.js');
+	// NPM packages & exports
+	var inquirer = require('inquirer');
+	var chalk = require('chalk');
+	var isLetter = require('is-letter');
+	var WordConstructor = require('./wordConstructor.js');
 
-// Game Logic Function
+	// Game Logic Function
 	var gameLogic = {
 		currentWord : null,
 		guessesRemaining : 0,
 		guessedLetters : [],
 		letterAlreadyGuessed : false,
+		// Word choosing object
 		wordChooser : {
 			// Word list
-			wordsList : ['banana', 'apple', 'orange', 'peach'],
+			wordsList : ['apple', 'apricot', 'avocado', 'banana', 'berry', 'blackberry', 'blood orange', 'blueberry', 'boysenberry', 'breadfruit', 'cantaloupe', 'cherry', 'citron', 'citrus', 'coconut', 'crabapple', 'cranberry', 'date', 'dragonfruit', 'durian', 'elderberry', 'fig', 'grape', 'grapefruit', 'guava', 'honeydew', 'jackfruit', 'kiwi', 'kumquat', 'lemon', 'lime', 'lingonberry', 'loquat', 'lychee', 'mandarin orange', 'mango', 'marionberry', 'melon', 'mulberry', 'nectarine', 'orange', 'papaya', 'passion fruit', 'peach', 'pear', 'persimmon', 'pineapple', 'plantain', 'plum', 'pluot', 'pomegranate', 'pomelo', 'quince', 'raspberry', 'star fruit', 'strawberry', 'tangelo', 'tangerine', 'ugli fruit', 'watermelon'],
+			//wordsList : ['blood orange'],
 			// Random Number
 			randomNumber : 0,
 			// Current word to guess 
@@ -23,11 +25,13 @@
 			// Pick mystery word at random
 			chooseRandomWord : function(){
 				// Find random number between 0 and length of word list
-				this.randomNumber = Math.floor(Math.random()* this.wordsList.length);		
+				this.randomNumber = Math.floor(Math.random()* this.wordsList.length);	
+				// Pick random workd and cover it to uppercase	
 				this.randomWord = this.wordsList[this.randomNumber].toUpperCase();		
 			}
 		},
 		welcome : function(){
+			// Welcome Screen
 			console.log(chalk.bold("\n\n\nW e l c o m e   t o   H a n g m a n !\n"));
 			console.log('\n  _______','\n |/      |','\n |      (_)','\n |      \\|/','\n |       |','\n |      / \\','\n |','\n_|___\n\n\n');
 		},
@@ -39,9 +43,9 @@
 			// Create letter objects
 			this.currentWord.createLetterObjects();
 			// Debug display
-			//this.currentWord.display();
+			// this.currentWord.display();
 			// Remaining guesses
-			this.guessesRemaining = this.currentWord.word.length;
+			this.guessesRemaining = this.currentWord.numLetters;
 			console.log(`You have guesses ${this.guessesRemaining} remaining.\n`);
 			// Create gameboard
 			this.currentWord.createGameboard();
