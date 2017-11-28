@@ -28,12 +28,14 @@ var WordConstructor = function(word) {
 	this.createGameboard = function() {
 		var gameboard = '';
 		for (var i = 0; i < this.letters.length; i++) {
+			// Create a board of letters according to their current visibilty status
 			var currentLetter = this.letters[i].letterVisibility();
 			gameboard += currentLetter;
 		};
 		// Display gameboard
 		console.log("\n" + gameboard + "\n");
 	};
+	// Returns boolean value if letter has been found or not
 	this.checkLetter = function(userLetter) {
 		var letterFound = false;
 		for (var i = 0; i < this.letters.length; i++) {
@@ -48,6 +50,7 @@ var WordConstructor = function(word) {
 			return false;
 		}
 	};
+	// Returns boolean value if word has been found or not.
 	this.checkIfWordFound = function() {
 		var wordFound = true;
 		for (var i = 0; i < this.letters.length; i++) {
@@ -56,8 +59,6 @@ var WordConstructor = function(word) {
 		};
 		return wordFound; 
 	}
-	// Word: Used to create an object representing the current word the user is attempting to guess. 
-	// This should contain word specific logic and data.
 };		
 
 

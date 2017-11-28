@@ -124,7 +124,9 @@
 			}
 			return false;
 		},
+		// Ask user if they would like to play again
 		playAgain : function() {
+			// Reset guessed letters array
 			this.guessedLetters = [];
 			var self = this;
 			inquirer.prompt([{
