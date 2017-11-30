@@ -35,32 +35,33 @@ var WordConstructor = function(word) {
 		// Display gameboard
 		console.log("\n" + gameboard + "\n");
 	};
-	// Returns boolean value if letter has been found or not
-	this.checkLetter = function(userLetter) {
-		var letterFound = false;
-		for (var i = 0; i < this.letters.length; i++) {
-			if (this.letters[i].letter === userLetter) {
-				this.letters[i].showLetter = true;
-				letterFound = true;
-			};
-		};
-		if (letterFound) {
-			return true;
-		} else {
-			return false;
-		}
-	};
-	// Returns boolean value if word has been found or not.
-	this.checkIfWordFound = function() {
-		var wordFound = true;
-		for (var i = 0; i < this.letters.length; i++) {
-			if (this.letters[i].showLetter === false)
-				wordFound = false;
-		};
-		return wordFound; 
-	}
-};		
+};	
 
+// Returns boolean value if letter has been found or not
+WordConstructor.prototype.checkLetter = function(userLetter) {
+	var letterFound = false;
+	for (var i = 0; i < this.letters.length; i++) {
+		if (this.letters[i].letter === userLetter) {
+			this.letters[i].showLetter = true;
+			letterFound = true;
+		};
+	};
+	if (letterFound) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+// Returns boolean value if word has been found or not.
+WordConstructor.prototype.checkIfWordFound = function() {
+	var wordFound = true;
+	for (var i = 0; i < this.letters.length; i++) {
+		if (this.letters[i].showLetter === false)
+			wordFound = false;
+	};
+	return wordFound; 
+}
 
 // Export
 module.exports = WordConstructor;
